@@ -8,7 +8,7 @@
 [![Cursor](https://img.shields.io/badge/Cursor-compatible-blue)]()
 [![Gemini CLI](https://img.shields.io/badge/Gemini%20CLI-compatible-orange)]()
 
-StackScan runs a 15-step analysis on your operations and gives you a financial breakdown of every tool, every hour wasted, and exactly what to change, with the math shown. ~20 minutes, ~$2 in LLM costs.
+StackScan runs a 15-step analysis on your operations and tech stack — every tool, every dependency, every infrastructure cost — and gives you a financial breakdown of exactly what to change, with the math shown. ~20 minutes, ~$2 in LLM costs.
 
 ```
 $ /stackscan
@@ -29,7 +29,8 @@ $ /stackscan
 - **Agency founders:** 8 people, 14 tools, nobody knows which Slack channel to post in
 - **E-commerce operators:** Orders, fulfillment, returns, all copy-pasted between tabs
 - **Solo consultants:** Produce investment-grade analysis for clients, fast
-- **Bootstrapped SaaS founders:** Spending €2K/mo on tools with no idea what's working
+- **Bootstrapped SaaS founders:** Spending €2K/mo on tools and cloud infrastructure with no idea what's working
+- **Solo developers / indie hackers:** Firebase, Expo, Hetzner, CI/CD — the tech stack IS the ops stack
 
 ---
 
@@ -37,7 +38,8 @@ $ /stackscan
 
 - **Every number shows its math.** `109 min/wk (= 35 min x 2 artworks/wk + 15 min x 3 invoices/wk + ...)`
 - **You control every assumption.** Edit any input at 3 checkpoints. The analysis recalculates from there.
-- **Web-verified tool pricing.** Real prices from live web search, not training data.
+- **Web-verified pricing — tools and infrastructure.** Real prices from live web search for SaaS tools, cloud providers, and dev services. Not training data.
+- **Codebase-aware.** Browses your project files to detect the full dependency and infrastructure stack before asking you anything.
 - **Investment framing, not tool lists.** Every recommendation tied to ROI and payback period.
 - **Automated consistency check.** A quality gate cross-checks all numbers, prices, and names before delivery.
 - **No vendor bias.** Open source, MIT licensed. You see every prompt.

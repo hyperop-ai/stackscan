@@ -83,7 +83,16 @@ Wait for the user before mining.
 ### 1b. Mine approved sources
 Mine only approved sources, or all if the user says "go ahead".
 Use:
-- File sources: README, package manifests, docs, config files, `.env.example` only
+- File sources: browse the full directory tree. Identify and read any file that reveals tooling, dependencies, infrastructure, or costs — by name, extension, location, or content pattern. Use judgment: a 50,000-line source file is not a config file. Read application code only if no other signal is available. Files worth checking include but are not limited to: package manifests (package.json, Cargo.toml, requirements.txt, Gemfile, go.mod, pom.xml), lock files, infrastructure configs (Dockerfile, docker-compose.yml, .github/workflows/, firebase.json, app.json, capacitor.config.ts, Fastfile), environment templates (.env.example), and README/docs.
+
+For each detected tool, service, or dependency, classify it:
+- **SaaS SDK**: cloud service accessed via API key or client library (Firebase, Stripe, Segment, Twilio, Sentry, Mixpanel)
+- **Infrastructure**: compute, hosting, storage, CDN, database providers (Hetzner, Fly.io, Coolify, Cloudflare, Supabase, Railway, Vercel)
+- **Dev Tool**: tooling with potential paid tiers (Expo EAS, Fastlane, GitHub Actions minutes, Apple Developer Program, TestFlight)
+- **Framework**: architectural dependency, no direct cost (React, Next.js, Capacitor, Express, FastAPI, Laravel)
+- **Library**: pure utility, no cost relevance (lodash, zod, dayjs, axios)
+
+Flag all SaaS SDKs and Infrastructure items for pricing research in Step 2. Store the classified inventory in `sharedFacts.techStack`.
 - MCP sources: company wiki, org/repo metadata, team info, SOPs, channel structures
 - Web sources: website, about/team/pricing pages, LinkedIn, Crunchbase, social signals
 Extract and record with source and HIGH/MEDIUM/LOW confidence:
@@ -96,20 +105,10 @@ Extract and record with source and HIGH/MEDIUM/LOW confidence:
 - business metrics
 ### 1c. Build company profile
 Read `./templates/company.md`.
-Present findings conversationally and ask for confirmation. For each role, suggest typical time allocation and surface likely missing processes. Ask one question at a time for critical gaps only:
-- company name
-- team size
-- current tools
-- country
-- legal status
-Use `./prompts/intake-company.md` for the interview structure.
+Use `./prompts/intake-company.md` for the full intake flow. The intake opens by presenting what is already known from Phase 1b — do not start from scratch.
 ### 1d. Discover process
 Read `./templates/process.md`.
-Search for SOPs, runbooks, workflow docs, boards, and CI/CD clues. If the process is documented, show it and confirm; otherwise ask the user to walk through it. Use `./prompts/intake-process.md`.
-Infer missing steps from industry patterns, tool-implied flows, and logical necessity. Present the map with:
-- `v` for user-described steps
-- `^` for inferred steps
-Turn LOW-confidence inferences into questions.
+Use `./prompts/intake-process.md` for the full intake flow. The process map opens with an inferred map based on the tool stack already in context — do not ask the user to walk through the process from scratch.
 ### 1e. Readiness and setup
 Before creating the project:
 - score company profile completeness vs template
@@ -139,7 +138,14 @@ Write `progress.json`:
     "researchBrief": null,
     "researchShortlist": [],
     "researchConfidence": null,
-    "fastRun": false
+    "fastRun": false,
+    "techStack": {
+      "saasSDKs": [],
+      "infrastructure": [],
+      "devTools": [],
+      "frameworks": [],
+      "flaggedForPricing": []
+    }
   },
   "steps": []
 }

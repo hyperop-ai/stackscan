@@ -22,6 +22,22 @@ Also review shared facts from `~/.stackscan/projects/{project}/progress.json`:
 
 ## Task
 
+### Phase 0: Tech Stack Pricing Research (run first if techStack is populated)
+
+If `sharedFacts.techStack.flaggedForPricing` is non-empty, research pricing for each flagged item before the pain point loop. This runs first because tech stack costs are inputs to the inefficiency analysis, not outputs of it.
+
+For each flagged **SaaS SDK**:
+- Search: `[name] pricing [current year]` — record tier name, per-unit cost (seats, API calls, GB), free tier limits, minimum commitments
+- Check if a newer major version or pricing model exists (freshness signal)
+
+For each flagged **Infrastructure** item:
+- Search: `[provider] [resource type] pricing` — record on-demand vs reserved pricing, egress costs, auto-scaling risks
+- Note: free tier limits vs. actual usage tier (tier fit signal)
+
+Record all findings with source URL and retrieval date. Update `sharedFacts.techStack` with pricing and freshness data. If WebSearch/WebFetch are unavailable, note "pricing based on training data — verify before acting."
+
+---
+
 ### Phase 1: Classify Pain Points
 
 Map every pain point from company.md and plan.md into the pain taxonomy hierarchy:

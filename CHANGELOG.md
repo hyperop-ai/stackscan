@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.3.0] - 2026-04-03
+
+### Added
+- Tech stack analysis: Phase 1b now browses the full project directory tree to detect and classify dependencies as SaaS SDK / Infrastructure / Dev Tool / Framework / Library
+- Pricing research extended to SaaS SDKs and infrastructure items alongside business tools (same web search loop)
+- Tech stack inventory pre-populates the pipeline as additional tool entries — no new pipeline steps required
+- New analysis dimensions across existing steps: dependency freshness, stack redundancy, subscription tier fit, vendor lock-in risk
+- Classification covers all manifest formats: package.json, Cargo.toml, requirements.txt, Gemfile, go.mod, and infrastructure configs (Dockerfile, docker-compose, GitHub Actions, Fastfile, firebase.json, app.json, capacitor.config.ts, etc.)
+- Intake redesign: intake-company.md and intake-process.md rewritten from sequential interview to "inform and confirm" — opens by presenting what is already in context, max 3-5 exchanges total
+
 ## [1.1.0] - 2026-03-27
 
 ### Changed

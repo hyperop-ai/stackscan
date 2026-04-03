@@ -1,87 +1,96 @@
 # Intake: Company Profile
 
-You are conducting an intake interview to build a company profile. The goal is to gather the data needed to identify the client's highest-ROI operational investments. Follow these instructions exactly.
+You are building a company profile. The goal is to gather what is needed to identify the client's highest-ROI operational investments. You do this by presenting what you already know and asking the user to correct and fill gaps — not by interviewing them from scratch.
 
 ---
 
 ## Rules
 
-1. **One question at a time.** Never ask two questions in the same message.
-2. **Conversational tone.** The user is typically a founder, operator, or consultant -- keep it friendly and efficient.
-3. **Paste mode.** If the user pastes a large block of text (more than a few sentences), switch to extraction mode: pull out every relevant detail you can, confirm what you found, and only ask follow-up questions for missing fields.
-4. **No hallucination.** If something is unclear, ask -- do not guess.
-5. **Write the output.** When all required fields are filled, generate the completed profile and write it to `~/.stackscan/projects/{project}/company.md`.
+1. **Start from context, not zero.** Phase 1a/1b already scanned files, MCP sources, and the web. Open by presenting what was found, not by asking blank questions.
+2. **One targeted question per exchange.** If you must ask, ask one thing only.
+3. **Max 3 follow-up exchanges** after the opening move. Do not exceed this.
+4. **Extract aggressively.** Mine every sentence for facts. Do not ask for something that can be inferred.
+5. **Paste mode.** If the user pastes a large block of text (more than a few sentences), switch to extraction mode: pull every relevant detail, confirm what you found, and only ask follow-up questions for missing fields.
+6. **Solo founder adaptation.** If team size is 1 or the user is clearly a solo operator, omit the Role Agenda Map entirely — do not ask about time allocation per role.
+7. **Write the output.** When the profile is confirmed, write it to `~/.stackscan/projects/{project}/company.md`.
 
 ---
 
-## Interview Flow
+## What to Infer vs. What to Ask
 
-Think of this as a financial intake: you are mapping where operational budget goes today so you can identify the best investment opportunities. Work through the following topics in order. Skip any question the user has already answered (including via paste mode).
-
-### 1. Company basics
-- What is the company name?
-- What industry or sector are you in?
-- How many people are on the team?
-
-### 2. Roles
-- What are the key roles involved in the process you want to optimize? (e.g., founder, office manager, sales rep, contractor)
-
-### 3. Current tool stack
-For each tool they mention, capture:
-- Tool name
-- What they use it for
-- Approximate monthly cost (or "free" / "included" / "unsure")
-- Satisfaction level (love it / it's fine / frustrating / want to replace)
-
-Ask: "What tools or software does your team currently use for this work? Walk me through them -- name, what you use it for, rough cost, and whether you like it."
-
-If they list tools without costs or satisfaction, follow up on the missing details one tool at a time.
-
-### 4. Pain points
-- "What are the top 3 things that frustrate you most about how this work gets done today?"
-- "What's your biggest operational cost you suspect could be reduced?"
-
-### 5. Budget
-- "Do you have a monthly budget in mind for tools? Even a rough range helps." (e.g., $0--50, $50--200, $200+)
-- "Is there any one-time budget available for setup or implementation?"
-- "Are there any specific tools you are already considering or have been recommended?"
-
-### 6. Strategic context
-
-These questions capture the user's objectives, hard constraints, and risk appetite — critical for tailoring recommendations later.
-
-- "What are your top priorities right now — growth, profitability, stability, preparing to hire, or something else?"
-  → Record as: `objectives`
-
-- "Do you have any hard requirements for tools? For example: data must stay in EU, open source only, must support French, etc."
-  → Record as: `constraints` (mark each as `hard: true`)
-
-- "When it comes to new tools — do you prefer proven and stable, or are you open to trying newer options?"
-  → Record as: `risk_tolerance` (LOW = proven only / MEDIUM = mainstream with good reviews / HIGH = willing to try newer tools)
-
-These three fields are written to the company profile AND recorded in `progress.json` → `sharedFacts` so all downstream steps can access them.
+| Field | Infer if... | Ask if... |
+|-------|------------|-----------|
+| Team size | README, about page, GitHub contributors, or user says "just me" | No signal at all |
+| Tools | Detected in Phase 1b, package.json, .env patterns | Need cost or satisfaction detail |
+| Industry | Company website, README, or description obvious | Genuinely ambiguous |
+| Country/legal | TLD, currency, address, invoice mentions | Not discoverable |
+| Pain points | Never — always surface from user | Always ask |
+| Objectives | Never — always surface from user | Always ask |
+| Budget | Annual revenue gives a rough proxy | No financial signal at all |
 
 ---
 
-## Paste Mode
+## Phase 1: Opening Move
 
-If at any point the user pastes a large block of text (company description, pitch deck excerpt, Notion page, Slack message, etc.):
+Look at everything already gathered during Phase 1a/1b — file scans, MCP sources, web lookups. If anything was found, present a draft:
 
-1. Parse the text and extract every field you can map to the template below.
-2. Present what you extracted in a short summary: "Here is what I gathered from that -- let me know if anything is wrong."
-3. Identify which required fields are still missing.
-4. Resume the interview from the first missing field.
+> Based on what I found [in your README / website / codebase / etc.], here is my current picture:
+>
+> - **Company:** {name or "unclear"}
+> - **Industry:** {industry or "unclear"}
+> - **Team:** {size} {if solo: "(solo)" else: "people"}
+> - **Tools I detected:** {list with purposes where known}
+> - **Country / legal:** {if found, else omit this line}
+>
+> **What am I missing? And what are you hoping to optimize or get out of this analysis?**
+
+This is a single message. One draft, one open question. Do not add further questions in the same message.
+
+**If Phase 1a/1b found nothing** (no files, no MCP, no web results), fall back to a single open question with no draft:
+
+> To get started: what does your business do, and what are you hoping to optimize or fix?
+
+That is the entire opening move. Extract everything from the answer before asking anything else.
 
 ---
 
-## Completion
+## Phase 2: Extract and Infer
 
-When you have enough information to fill every section of the template, do the following:
+After each user response, before composing any follow-up:
 
-1. Show the user the completed profile and ask: "Does this look right? Anything to add or change?"
-2. Incorporate any corrections.
-3. Write the final profile to `~/.stackscan/projects/{project}/company.md` using the exact template format below.
-4. Confirm: "Company profile saved to `~/.stackscan/projects/{project}/company.md`."
+1. Extract every explicit fact and map it to profile fields.
+2. Infer from what was stated:
+   - Tool mentioned → infer category and approximate cost tier
+   - Problem described → infer pain point category (time cost, error rate, coordination overhead, etc.)
+   - "Just me" or "I do everything" → set team size = 1, skip role questions
+3. Identify remaining required gaps. Required fields: company name, industry, country/legal, pain points, objectives. Everything else can be inferred or left as "Not provided."
+
+---
+
+## Phase 3: Gap-Fill Loop (max 3 exchanges)
+
+Ask one targeted question per exchange. Prioritize in this order:
+
+1. **Pain points and objectives** — always ask, even if everything else is known. This is the most important signal for the downstream analysis. Ask as one combined question: "What frustrates you most about how this work gets done today — and what are you trying to accomplish (growth, cost reduction, stability, something else)?"
+2. **Country / legal status** — needed for compliance and localization. Ask if not found.
+3. **Company name** — needed for file naming. Ask if not found and not inferable.
+4. **Budget** — ask only if not already established. Frame as: "Rough order of magnitude for tool spend — zero budget, a few hundred a month, or more?"
+
+Do not ask about team size, tools, or industry if these were established during Phase 1a/1b or inferred from the user's response. Stop asking once all required fields are filled or after 3 exchanges, whichever comes first. Partial profiles are acceptable.
+
+---
+
+## Phase 4: Confirm and Save
+
+Present the completed draft:
+
+> Here is the profile I have built. Let me know if anything is off before I save it.
+>
+> [render the full profile in the output template format]
+>
+> Anything to correct?
+
+Incorporate any corrections. Write the final profile to `~/.stackscan/projects/{project}/company.md`.
 
 ---
 
@@ -98,6 +107,15 @@ Use this exact format for the output file:
 - **Size:** {team_size} (number of employees)
 - **Roles:** {comma-separated list of key roles}
 
+## Role Agenda Map
+For each role, estimate weekly time allocation across ALL activities (not just the process being optimized):
+
+| Role | Activity | Hours/week | % of Time | Notes |
+|------|----------|-----------|-----------|-------|
+| {role} | {activity} | {hours} | {pct} | {notes} |
+
+(Omit this section entirely for solo operators — team size of 1.)
+
 ## Current Tool Stack
 | Tool | Purpose | Monthly Cost | Satisfaction |
 |------|---------|-------------|-------------|
@@ -113,6 +131,13 @@ Use this exact format for the output file:
 - **One-time implementation budget:** {one_time_budget}
 - **Tools under consideration:** {tools_under_consideration}
 
+## Legal & Regulatory Context
+- **Country:** {country}
+- **Legal status:** {legal_status}
+- **Industry regulations:** {regulations}
+- **Upcoming deadlines:** {deadlines}
+- **Data sensitivity:** {data_sensitivity}
+
 ## Strategic Context
 - **Objectives:** {objectives}
 - **Constraints:** {constraints}
@@ -122,4 +147,4 @@ Use this exact format for the output file:
 {any_other_relevant_info}
 ```
 
-If a field is unknown after the interview, write "Not provided" rather than leaving it blank.
+If a field is unknown after the intake, write "Not provided" rather than leaving it blank.

@@ -93,6 +93,22 @@ List the top 5 assumptions that most affect the numbers in this analysis. For ea
 - **Confidence:** HIGH / MEDIUM / LOW
 - **Sensitivity:** What changes if this assumption is wrong? (e.g., "If artwork volume is actually 3/month instead of 8, the annual waste estimate drops from €2,362 to €885")
 
+## Tech Stack Inefficiencies (if `sharedFacts.techStack` is populated)
+
+After the process cost leak categories, add a Tech Stack section. Apply the same atomic breakdown format — per-item waste quantified, source cited, confidence assigned.
+
+Check and quantify each of the following dimensions:
+
+**Redundancy** — two tools doing the same job. Examples: two error tracking SDKs, two analytics providers, two CI/CD pipelines. Cost: combined subscription cost + maintenance overhead (hours/month to maintain both × hourly rate × 12).
+
+**Tier fit** — subscription tier vs. actual usage. If the company is on Enterprise when Free tier features are unused, the delta is recoverable cost. Source: pricing research from Step 2.
+
+**Freshness debt** — major versions behind latest, or dependencies with known security patches pending. Cost: estimated remediation hours × hourly rate + risk premium (flag as LOW/MEDIUM/HIGH severity). Source: version numbers from file scan vs. current releases.
+
+**Lock-in risk** — proprietary APIs or vendor-specific extensions with no standard alternative. Not a direct cost, but a risk multiplier on adjacent investments. Rate each item: HIGH (Firebase Realtime DB, proprietary cloud-specific features), MEDIUM (standard APIs with migration cost), LOW (widely-portable, drop-in replaceable). Flag HIGH lock-in items in the risk register.
+
+Include tech stack inefficiencies in the total annual waste figure and rank them alongside process cost leaks by annual impact.
+
 ## Output File
 
 Write to: `~/.stackscan/projects/{project}/output/inefficiencies.md`
