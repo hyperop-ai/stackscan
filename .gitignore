@@ -29,3 +29,6 @@ web/
 benchmark/
 docs/
 firebase-debug.log
+
+# Local Netlify folder
+.netlify
