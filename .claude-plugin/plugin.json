@@ -1,0 +1,12 @@
+{
+  "name": "stackscan",
+  "displayName": "StackScan: Operational Investment Decision Engine",
+  "description": "Turn operations into investment decisions with measurable ROI. Builds a complete capital allocation case for every process change.",
+  "version": "1.1.0",
+  "author": { "name": "HyperOp" },
+  "repository": "https://github.com/hyperop-ai/stackscan",
+  "license": "MIT",
+  "keywords": ["capital-allocation", "investment-decisions", "ROI", "operations", "financial-analysis", "business-analysis", "decision-engine"],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json"
+}

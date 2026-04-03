@@ -1,0 +1,16 @@
+{
+  "description": "StackScan lifecycle hooks for auto-resume, output validation, and cost tracking",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'LATEST=$(ls -t ~/.stackscan/projects/*/progress.json 2>/dev/null | head -1); if [ -n \"$LATEST\" ]; then STEPS=$(grep -o \"completed\" \"$LATEST\" | wc -l); TOTAL=15; if [ $STEPS -lt $TOTAL ]; then echo \"StackScan: Incomplete project found. Use /stackscan to resume, or /stackscan new to start over.\"; fi; fi'"
+          }
+        ]
+      }
+    ]
+  }
+}

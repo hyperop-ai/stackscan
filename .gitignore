@@ -1,0 +1,30 @@
+# StackScan output directories
+.stackscan/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editor directories
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Environment files
+.env
+.env.local
+.env.*.local
+# Local-only (unversioned)
+tests/
+skills/test/
+web/
+benchmark/
+docs/

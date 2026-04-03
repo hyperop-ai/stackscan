@@ -1,0 +1,7 @@
+{
+  "name": "stackscan",
+  "displayName": "StackScan — Operational Investment Decision Engine",
+  "description": "Analyze operations, recommend tools, calculate ROI, build adoption plans",
+  "version": "1.1.0",
+  "skills": "./skills/"
+}

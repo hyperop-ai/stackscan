@@ -1,0 +1,7 @@
+{
+  "name": "stackscan",
+  "source": {
+    "source": "github",
+    "repo": "hyperop-ai/stackscan"
+  }
+}

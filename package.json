@@ -1,0 +1,7 @@
+{
+  "name": "stackscan",
+  "version": "1.1.0",
+  "description": "StackScan — Operational investment decision engine skill plugin",
+  "license": "MIT",
+  "keywords": ["claude-code", "skill", "capital-allocation", "investment-decisions", "ROI", "financial-analysis"]
+}
